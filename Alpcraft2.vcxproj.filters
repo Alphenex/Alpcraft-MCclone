@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Folder">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Folder\glObjects">
+      <UniqueIdentifier>{e2a55d9c-8c5e-4379-b536-e3c7abbe778e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Folder\Alpcraft">
+      <UniqueIdentifier>{1ea5257a-14c3-4208-96da-3ef1a7c7cbc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Folder\Alpcraft\World">
+      <UniqueIdentifier>{8d3ffc73-d7e7-43f9-afd5-bcb323746d27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Folder\Alpcraft\Player">
+      <UniqueIdentifier>{d6616985-8299-4622-8f1f-c96024145d1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{3263b6f8-3732-4737-8754-f922b5cf2cfa}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Folder</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glObj\VertexArray.cpp">
+      <Filter>Source Folder\glObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glObj\VertexBuffer.cpp">
+      <Filter>Source Folder\glObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glObj\IndexBuffer.cpp">
+      <Filter>Source Folder\glObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glObj\Shader.cpp">
+      <Filter>Source Folder\glObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glObj\Texture.cpp">
+      <Filter>Source Folder\glObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Alpcraft\AChunk.cpp">
+      <Filter>Source Folder\Alpcraft\World</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Alpcraft\AChunkMesh.cpp">
+      <Filter>Source Folder\Alpcraft\World</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Alpcraft\AWorld.cpp">
+      <Filter>Source Folder\Alpcraft\World</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Alpcraft\Player\player.cpp">
+      <Filter>Source Folder\Alpcraft\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Alpcraft\Player\camera.cpp">
+      <Filter>Source Folder\Alpcraft\Player</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\glObj\Texture.h">
+      <Filter>Source Folder\glObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glObj\VertexArray.h">
+      <Filter>Source Folder\glObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glObj\VertexBuffer.h">
+      <Filter>Source Folder\glObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glObj\IndexBuffer.h">
+      <Filter>Source Folder\glObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\glObj\Shader.h">
+      <Filter>Source Folder\glObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Alpcraft\UtilityManager.h">
+      <Filter>Source Folder\Alpcraft</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Alpcraft\AWorld.h">
+      <Filter>Source Folder\Alpcraft\World</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Alpcraft\ABlockData.h">
+      <Filter>Source Folder\Alpcraft\World</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Alpcraft\AChunk.h">
+      <Filter>Source Folder\Alpcraft\World</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Alpcraft\AChunkMesh.h">
+      <Filter>Source Folder\Alpcraft\World</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Alpcraft\Player\camera.h">
+      <Filter>Source Folder\Alpcraft\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Alpcraft\Player\player.h">
+      <Filter>Source Folder\Alpcraft\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\gameinfo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\default.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\default.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\blockpick.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\blockpick.vert">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Alpcraft2.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\icon.ico" />
+  </ItemGroup>
+</Project>

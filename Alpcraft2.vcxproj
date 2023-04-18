@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Alpcraft\AChunk.cpp" />
+    <ClCompile Include="src\Alpcraft\AChunkMesh.cpp" />
+    <ClCompile Include="src\Alpcraft\AWorld.cpp" />
+    <ClCompile Include="src\Alpcraft\Player\camera.cpp" />
+    <ClCompile Include="src\Alpcraft\Player\player.cpp" />
+    <ClCompile Include="src\glObj\IndexBuffer.cpp" />
+    <ClCompile Include="src\glObj\Shader.cpp" />
+    <ClCompile Include="src\glObj\Texture.cpp" />
+    <ClCompile Include="src\glObj\VertexArray.cpp" />
+    <ClCompile Include="src\glObj\VertexBuffer.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Alpcraft\ABlockData.h" />
+    <ClInclude Include="src\Alpcraft\AChunk.h" />
+    <ClInclude Include="src\Alpcraft\AChunkMesh.h" />
+    <ClInclude Include="src\Alpcraft\AWorld.h" />
+    <ClInclude Include="src\Alpcraft\Player\camera.h" />
+    <ClInclude Include="src\Alpcraft\Player\player.h" />
+    <ClInclude Include="src\Alpcraft\UtilityManager.h" />
+    <ClInclude Include="src\gameinfo.h" />
+    <ClInclude Include="src\glObj\IndexBuffer.h" />
+    <ClInclude Include="src\glObj\Shader.h" />
+    <ClInclude Include="src\glObj\Texture.h" />
+    <ClInclude Include="src\glObj\VertexArray.h" />
+    <ClInclude Include="src\glObj\VertexBuffer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\blockpick.frag" />
+    <None Include="shaders\blockpick.vert" />
+    <None Include="shaders\default.frag" />
+    <None Include="shaders\default.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Alpcraft2.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\icon.ico" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{6b06cd32-c0f0-486e-a098-4c99dd803d25}</ProjectGuid>
+    <RootNamespace>Alpcraft2</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Users\Lenovo\Desktop\projects\Alpcraft2\src;C:\Users\Lenovo\Desktop\projects\Alpcraft2\lib\include;$(IncludePath)</IncludePath>
+    <SourcePath>C:\Users\Lenovo\Desktop\projects\Alpcraft2\src;$(SourcePath)</SourcePath>
+    <LibraryPath>C:\Users\Lenovo\Desktop\projects\Alpcraft2\lib\debug;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\Users\Lenovo\Desktop\projects\Alpcraft2\src;C:\Users\Lenovo\Desktop\projects\Alpcraft2\lib\include;$(IncludePath)</IncludePath>
+    <SourcePath>C:\Users\Lenovo\Desktop\projects\Alpcraft2\src;$(SourcePath)</SourcePath>
+    <LibraryPath>C:\Users\Lenovo\Desktop\projects\Alpcraft2\lib\release;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\Lenovo\Desktop\projects\Alpcraft2\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;openal32.lib;sfml-main-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-network-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>GLEW_STATIC;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\Lenovo\Desktop\projects\Alpcraft2\lib\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;openal32.lib;sfml-main.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-network.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
