@@ -14,7 +14,7 @@
 #include <future>
 #include <deque>
 
-#define RenderDistanceH 8
+#define RenderDistanceH 4
 #define RenderDistanceV 2
 
 class World {
@@ -42,6 +42,7 @@ public:
 private:
 	std::unordered_map<glm::ivec3, Chunk*> WorldChunks;
 	std::vector<Chunk*> ChunkContainer;
+	std::deque<Chunk*> OutdatedLightChunks;
 	std::deque<Chunk*> OutdatedChunks;
 
 	glm::ivec3 PlayerOlderPos = { 0, -12322, 0 };

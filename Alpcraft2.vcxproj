@@ -40,8 +40,6 @@
     <ClInclude Include="src\glObj\VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\blockpick.frag" />
-    <None Include="shaders\blockpick.vert" />
     <None Include="shaders\default.frag" />
     <None Include="shaders\default.vert" />
   </ItemGroup>

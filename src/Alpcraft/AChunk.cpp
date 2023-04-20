@@ -109,12 +109,6 @@ void Chunk::SetBlock(glm::ivec3 _BlockPosition, Block _TypeID)
 		ChunkBlocks[CIndexV(_BlockPosition)] = _TypeID;
 
 		State = Outdated;
-
-		if (_TypeID == GlowStone)
-		{
-			LightNodeQueue.push(_BlockPosition);
-			SetLightLevel(_BlockPosition, 15);
-		}
 	}
 }
 
@@ -124,12 +118,6 @@ void Chunk::RemoveBlock(glm::ivec3 _BlockPosition)
 		_BlockPosition.y >= 0 && _BlockPosition.y < CHUNK_SIZE &&
 		_BlockPosition.z >= 0 && _BlockPosition.z < CHUNK_SIZE)
 	{
-
-		if (GetBlock(_BlockPosition) == GlowStone)
-		{
-			LightRemovalList.push(_BlockPosition);
-		}
-
 		ChunkBlocks[CIndexV(_BlockPosition)] = Air;
 
 		State = Outdated;
@@ -202,64 +190,7 @@ void Chunk::PropagateLights()
 				}
 			}
 	}
-
-	//while (!LightRemovalList.empty())
-	//{
-	//	glm::ivec3 LightBlock = LightRemovalList.front();
-	//	int LightBlockLevel = GetLightLevel(LightBlock);
-	//	LightRemovalList.pop();
-
-	//	SetLightLevel(LightBlock, 0);
-
-	//	for (int d = 0; d < 6; d++)
-	//	{
-	//		glm::ivec3 NeighbourBlock = LightBlock + Dir2Vec(d);
-	//		int NeighbourLightLevel = GetLightLevel(NeighbourBlock);
-
-	//		if (!IsInBound(NeighbourBlock)) continue;
-
-	//		if (NeighbourLightLevel != 0 && NeighbourLightLevel < LightBlockLevel)
-	//		{
-	//			LightMap[CIndexV(NeighbourBlock)] = 0;
-	//			LightRemovalList.push(NeighbourBlock);
-	//		}
-	//		else if (NeighbourLightLevel >= LightBlockLevel)
-	//		{
-	//			LightNodeQueue.push(NeighbourBlock);
-	//		}
-	//	}
-	//}
-
-	//while (!LightNodeQueue.empty())
-	//{
-	//	glm::ivec3 LightBlock = LightNodeQueue.front();
-	//	int LightBlockLevel = GetLightLevel(LightBlock);
-	//	LightNodeQueue.pop();
-
-	//	for (int d = 0; d < 6; d++)
-	//	{
-
-	//		glm::ivec3 NeighbourBlock = LightBlock + Dir2Vec(d);
-	//		int NeighbourLightLevel = GetLightLevel(NeighbourBlock);
-
-	//		if (!IsInBound(NeighbourBlock)) continue;
-
-	//		if (NeighbourLightLevel + 2 <= LightBlockLevel)
-	//		{
-	//			SetLightLevel(NeighbourBlock, LightBlockLevel - 1);
-	//			LightNodeQueue.push(NeighbourBlock);
-	//		}
-	//	}
-	//}
 }
-
-//int forward = GetLightLevel({ x, y, z + 1 });
-//int back = GetLightLevel({ x, y, z - 1 });
-//int right = GetLightLevel({ x + 1, y, z });
-//int left = GetLightLevel({ x - 1, y, z });
-//int up = GetLightLevel({ x, y + 1, z });
-//int down = GetLightLevel({ x, y - 1, z });
-/*LightMap[CIndex(x, y, z)] = glm::max(glm::max(forward, glm::max(back, glm::max(right, glm::max(left, glm::max(up, down))))) - 1, 1);*/
 
 void Chunk::MeshCreate()
 {
@@ -267,8 +198,6 @@ void Chunk::MeshCreate()
 	Mesh->PseudoIndCount = 0;
 
 	State = Updated;
-
-	SetLightLevel({ 15, 17, 15 }, 15);
 
 	PropagateLights();
 

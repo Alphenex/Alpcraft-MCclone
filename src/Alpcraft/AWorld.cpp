@@ -94,22 +94,7 @@ void World::RemoveWorldBlock(glm::vec3 _WorldPosition)
 
 void World::SetWorldLightInfo(glm::vec3 _WorldPosition, GLubyte _LightLevel)
 {
-	glm::ivec3 BlockPos;
-	glm::ivec3 ChunkPos;
 
-	BlockPos.x = _WorldPosition.x < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.x % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.x % CHUNK_SIZE;
-	BlockPos.y = _WorldPosition.y < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.y % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.y % CHUNK_SIZE;
-	BlockPos.z = _WorldPosition.z < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.z % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.z % CHUNK_SIZE;
-
-	ChunkPos.x = _WorldPosition.x < 0 ? (_WorldPosition.x - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.x / CHUNK_SIZE;
-	ChunkPos.y = _WorldPosition.y < 0 ? (_WorldPosition.y - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.y / CHUNK_SIZE;
-	ChunkPos.z = _WorldPosition.z < 0 ? (_WorldPosition.z - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.z / CHUNK_SIZE;
-
-	//if (GetChunk(ChunkPos) != nullptr)
-	//{
-	//	GetChunk(ChunkPos)->SetLightLevel(BlockPos, _LightLevel);
-	//	GetChunk(ChunkPos)->LightNodeQueue.push(BlockPos);
-	//}
 }
 
 void World::PutChunk(glm::ivec3 _Position)
@@ -127,17 +112,6 @@ void World::PutChunk(glm::ivec3 _Position)
 				chunk->SetBlock({ x, y, z }, Grass);
 				chunk->SetBlock({ x, y-1, z }, Dirt);
 				chunk->SetBlock({ x, y-4, z }, CottonStone);
-
-				if (glm::linearRand(0, 2) == 2)
-				{
-					chunk->SetBlock({ x, y + 1, z }, Grass);
-					chunk->SetBlock({ x, y, z }, Dirt);
-					if (glm::linearRand(0, 2) == 2)
-					{
-						chunk->SetBlock({ x, y + 2, z }, Grass);
-						chunk->SetBlock({ x, y + 1, z}, Dirt);
-					}
-				}
 			}
 
 		} else if (_Position.y < 0)
@@ -150,22 +124,22 @@ void World::PutChunk(glm::ivec3 _Position)
 			}
 		}
 
-		if (this->GetChunk(_Position + glm::ivec3(0, 0, 1)))
-			this->GetChunk(_Position + glm::ivec3(0, 0, 1))->State = Outdated;
-		if (this->GetChunk(_Position + glm::ivec3(0, 0, -1)))
-			this->GetChunk(_Position + glm::ivec3(0, 0, -1))->State = Outdated;
-		if (this->GetChunk(_Position + glm::ivec3(1, 0, 0)))
-			this->GetChunk(_Position + glm::ivec3(1, 0, 0))->State = Outdated;
-		if (this->GetChunk(_Position + glm::ivec3(-1, 0, 0)))
-			this->GetChunk(_Position + glm::ivec3(-1, 0, 0))->State = Outdated;
-		if (this->GetChunk(_Position + glm::ivec3(0, 1, 0)))
-			this->GetChunk(_Position + glm::ivec3(0, 1, 0))->State = Outdated;
-		if (this->GetChunk(_Position + glm::ivec3(0, -1, 0)))
-			this->GetChunk(_Position + glm::ivec3(0, -1, 0))->State = Outdated;
+		if (GetChunk(_Position + glm::ivec3(0, 0, 1)))
+			GetChunk(_Position + glm::ivec3(0, 0, 1))->State = Outdated;
+		if (GetChunk(_Position + glm::ivec3(0, 0, -1)))
+			GetChunk(_Position + glm::ivec3(0, 0, -1))->State = Outdated;
+		if (GetChunk(_Position + glm::ivec3(1, 0, 0)))
+			GetChunk(_Position + glm::ivec3(1, 0, 0))->State = Outdated;
+		if (GetChunk(_Position + glm::ivec3(-1, 0, 0)))
+			GetChunk(_Position + glm::ivec3(-1, 0, 0))->State = Outdated;
+		if (GetChunk(_Position + glm::ivec3(0, 1, 0)))
+			GetChunk(_Position + glm::ivec3(0, 1, 0))->State = Outdated;
+		if (GetChunk(_Position + glm::ivec3(0, -1, 0)))
+			GetChunk(_Position + glm::ivec3(0, -1, 0))->State = Outdated;
 
-		this->WorldChunks[_Position] = chunk;
-		this->ChunkContainer.push_back(chunk);
-		this->OutdatedChunks.push_front(chunk);
+		WorldChunks[_Position] = chunk;
+		ChunkContainer.push_back(chunk);
+		OutdatedChunks.push_front(chunk);
 	}
 }
 
@@ -195,6 +169,19 @@ void World::Update(glm::vec3 _PlayerPosition)
 	PlayerCurrentPos.y = floor(_PlayerPosition.y) / CHUNK_SIZE;
 	PlayerCurrentPos.z = floor(_PlayerPosition.z) / CHUNK_SIZE;
 
+	while (!OutdatedLightChunks.empty())
+	{
+		if (OutdatedLightChunks.at(0) != nullptr)
+		{
+			OutdatedLightChunks.at(0)->PropagateLights();
+			OutdatedLightChunks.pop_front();
+		}
+		else
+		{
+			OutdatedLightChunks.pop_front();
+		}
+	}
+
 	if (OutdatedChunks.size() > 0)
 	{
 		if (OutdatedChunks.at(0) != nullptr)
@@ -221,6 +208,7 @@ void World::Update(glm::vec3 _PlayerPosition)
 		{
 			if (ChunkContainer.at(i)->State == Outdated)
 			{
+				OutdatedLightChunks.push_front(ChunkContainer.at(i));
 				OutdatedChunks.push_front(ChunkContainer.at(i));
 				break;
 			}

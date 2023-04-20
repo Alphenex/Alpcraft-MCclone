@@ -15,11 +15,16 @@ public:
 	void Render(World& world);
 
 	glm::vec3 GetPosition() { return m_Position; }
+	glm::vec3 GetChunkPosition() { return m_ChunkPosition; }
+	glm::vec3 GetBlockPosition() { return m_BlockPosition; }
 
 private:
 	Camera* m_View;
 
 	glm::vec3 m_Position;
+
+	glm::ivec3 m_ChunkPosition;
+	glm::ivec3 m_BlockPosition;
 
 	float c_FOV = 70.0f;
 

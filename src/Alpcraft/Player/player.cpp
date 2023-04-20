@@ -169,6 +169,14 @@ void Player::Update(sf::Window& window, float dt, bool noclip, Shader& shader)
 		window.close();
 	}
 
+	m_BlockPosition.x = m_Position.x < 0 ? round((CHUNK_SIZE - 1 + ((int)m_Position.x % CHUNK_SIZE)) % CHUNK_SIZE) : (int)m_Position.x % CHUNK_SIZE;
+	m_BlockPosition.y = m_Position.y < 0 ? round((CHUNK_SIZE - 1 + ((int)m_Position.y % CHUNK_SIZE)) % CHUNK_SIZE) : (int)m_Position.y % CHUNK_SIZE;
+	m_BlockPosition.z = m_Position.z < 0 ? round((CHUNK_SIZE - 1 + ((int)m_Position.z % CHUNK_SIZE)) % CHUNK_SIZE) : (int)m_Position.z % CHUNK_SIZE;
+
+	m_ChunkPosition.x = m_Position.x < 0 ? (m_Position.x - CHUNK_SIZE) / CHUNK_SIZE : m_Position.x / CHUNK_SIZE;
+	m_ChunkPosition.y = m_Position.y < 0 ? (m_Position.y - CHUNK_SIZE) / CHUNK_SIZE : m_Position.y / CHUNK_SIZE;
+	m_ChunkPosition.z = m_Position.z < 0 ? (m_Position.z - CHUNK_SIZE) / CHUNK_SIZE : m_Position.z / CHUNK_SIZE;
+
 	m_View->UpdateMatrix(c_FOV, 0.2f, 1000.0f);
 	m_View->ShaderMatrix(shader, "cameraMatrix");
 }
