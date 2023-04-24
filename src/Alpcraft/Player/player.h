@@ -17,7 +17,9 @@ public:
 	glm::vec3 GetPosition() { return m_Position; }
 	glm::vec3 GetChunkPosition() { return m_ChunkPosition; }
 	glm::vec3 GetBlockPosition() { return m_BlockPosition; }
+	Block GetSelectedBlock() { return m_SelectedBlock; }
 
+	Block m_SelectedBlock = Grass;
 private:
 	Camera* m_View;
 
@@ -36,5 +38,4 @@ private:
 	VAO m_VAO;
 	Shader* m_Shader;
 
-	Block m_SelectedBlock = Grass;
 };

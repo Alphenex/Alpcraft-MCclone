@@ -4,6 +4,8 @@
 
 World::World()
 {
+	INIT_Blocks();
+
 
 }
 
@@ -22,29 +24,16 @@ Chunk* World::GetChunk(glm::ivec3 _ChunkPosition)
 
 Chunk* World::GetWorldChunk(glm::vec3 _ChunkWorldPosition)
 {
-	glm::ivec3 ChunkPos;
-
 	glm::ivec3 FWorldPos = floor(_ChunkWorldPosition);
-
-	ChunkPos.x = FWorldPos.x < 0 ? (FWorldPos.x - 32) / 32 : FWorldPos.x / 32;
-	ChunkPos.y = FWorldPos.y < 0 ? (FWorldPos.y - 32) / 32 : FWorldPos.y / 32;
-	ChunkPos.z = FWorldPos.z < 0 ? (FWorldPos.z - 32) / 32 : FWorldPos.z / 32;
+	glm::ivec3 ChunkPos = WorldToChunkPos(FWorldPos);
 
 	return GetChunk(ChunkPos);
 }
 
 Block World::GetWorldBlock(glm::vec3 _WorldPosition)
 {
-	glm::ivec3 BlockPos;
-	glm::ivec3 ChunkPos;
-
-	BlockPos.x = _WorldPosition.x < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.x % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.x % CHUNK_SIZE;
-	BlockPos.y = _WorldPosition.y < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.y % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.y % CHUNK_SIZE;
-	BlockPos.z = _WorldPosition.z < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.z % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.z % CHUNK_SIZE;
-
-	ChunkPos.x = _WorldPosition.x < 0 ? (_WorldPosition.x - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.x / CHUNK_SIZE;
-	ChunkPos.y = _WorldPosition.y < 0 ? (_WorldPosition.y - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.y / CHUNK_SIZE;
-	ChunkPos.z = _WorldPosition.z < 0 ? (_WorldPosition.z - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.z / CHUNK_SIZE;
+	glm::ivec3 BlockPos = WorldToBlockPos(_WorldPosition);
+	glm::ivec3 ChunkPos = WorldToChunkPos(_WorldPosition);
 
 	if (GetChunk(ChunkPos) != nullptr)
 	{
@@ -54,18 +43,23 @@ Block World::GetWorldBlock(glm::vec3 _WorldPosition)
 	return Air;
 }
 
+int World::GetWorldTorchLight(glm::vec3 _WorldPosition)
+{
+	glm::ivec3 BlockPos = WorldToBlockPos(_WorldPosition);
+	glm::ivec3 ChunkPos = WorldToChunkPos(_WorldPosition);
+
+	if (GetChunk(ChunkPos) != nullptr)
+	{
+		return GetChunk(ChunkPos)->GetTorchLightLevel(BlockPos);
+	}
+
+	return 0;
+}
+
 void World::SetWorldBlock(glm::vec3 _WorldPosition, Block _TypeID)
 {
-	glm::ivec3 BlockPos;
-	glm::ivec3 ChunkPos;
-
-	BlockPos.x = _WorldPosition.x < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.x % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.x % CHUNK_SIZE;
-	BlockPos.y = _WorldPosition.y < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.y % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.y % CHUNK_SIZE;
-	BlockPos.z = _WorldPosition.z < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.z % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.z % CHUNK_SIZE;
-
-	ChunkPos.x = _WorldPosition.x < 0 ? (_WorldPosition.x - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.x / CHUNK_SIZE;
-	ChunkPos.y = _WorldPosition.y < 0 ? (_WorldPosition.y - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.y / CHUNK_SIZE;
-	ChunkPos.z = _WorldPosition.z < 0 ? (_WorldPosition.z - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.z / CHUNK_SIZE;
+	glm::ivec3 BlockPos = WorldToBlockPos(_WorldPosition);
+	glm::ivec3 ChunkPos = WorldToChunkPos(_WorldPosition);
 
 	if (GetChunk(ChunkPos) != nullptr)
 	{
@@ -75,16 +69,8 @@ void World::SetWorldBlock(glm::vec3 _WorldPosition, Block _TypeID)
 
 void World::RemoveWorldBlock(glm::vec3 _WorldPosition)
 {
-	glm::ivec3 BlockPos;
-	glm::ivec3 ChunkPos;
-
-	BlockPos.x = _WorldPosition.x < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.x % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.x % CHUNK_SIZE;
-	BlockPos.y = _WorldPosition.y < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.y % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.y % CHUNK_SIZE;
-	BlockPos.z = _WorldPosition.z < 0 ? round((CHUNK_SIZE - 1 + ((int)_WorldPosition.z % CHUNK_SIZE)) % CHUNK_SIZE) : (int)_WorldPosition.z % CHUNK_SIZE;
-
-	ChunkPos.x = _WorldPosition.x < 0 ? (_WorldPosition.x - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.x / CHUNK_SIZE;
-	ChunkPos.y = _WorldPosition.y < 0 ? (_WorldPosition.y - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.y / CHUNK_SIZE;
-	ChunkPos.z = _WorldPosition.z < 0 ? (_WorldPosition.z - CHUNK_SIZE) / CHUNK_SIZE : _WorldPosition.z / CHUNK_SIZE;
+	glm::ivec3 BlockPos = WorldToBlockPos(_WorldPosition);
+	glm::ivec3 ChunkPos = WorldToChunkPos(_WorldPosition);
 
 	if (GetChunk(ChunkPos) != nullptr && GetChunk(ChunkPos)->GetBlock(BlockPos) != Air)
 	{
@@ -92,9 +78,26 @@ void World::RemoveWorldBlock(glm::vec3 _WorldPosition)
 	}
 }
 
-void World::SetWorldLightInfo(glm::vec3 _WorldPosition, GLubyte _LightLevel)
+void World::RemoveWorldTorchLight(glm::vec3 _WorldPosition)
 {
+	glm::ivec3 BlockPos = WorldToBlockPos(_WorldPosition);
+	glm::ivec3 ChunkPos = WorldToChunkPos(_WorldPosition);
 
+	if (GetChunk(ChunkPos) != nullptr)
+	{
+		GetChunk(ChunkPos)->RemoveTorchLight(BlockPos);
+	}
+}
+
+void World::AddWorldTorchLight(glm::vec3 _WorldPosition, GLubyte _LightLevel)
+{
+	glm::ivec3 BlockPos = WorldToBlockPos(_WorldPosition);
+	glm::ivec3 ChunkPos = WorldToChunkPos(_WorldPosition);
+
+	if (GetChunk(ChunkPos) != nullptr)
+	{
+		GetChunk(ChunkPos)->AddTorchlight(BlockPos, _LightLevel);
+	}
 }
 
 void World::PutChunk(glm::ivec3 _Position)
@@ -111,121 +114,68 @@ void World::PutChunk(glm::ivec3 _Position)
 			{
 				chunk->SetBlock({ x, y, z }, Grass);
 				chunk->SetBlock({ x, y-1, z }, Dirt);
-				chunk->SetBlock({ x, y-4, z }, CottonStone);
-			}
-
-		} else if (_Position.y < 0)
-		{
-			for (int x = 0; x < CHUNK_SIZE; x++)
-			for (int y = 0; y < CHUNK_SIZE; y++)
-			for (int z = 0; z < CHUNK_SIZE; z++)
-			{
-				chunk->SetBlock({ x, y, z }, Stone);
+				chunk->SetBlock({ x, y-4, z }, Cottonstone);
 			}
 		}
-
-		if (GetChunk(_Position + glm::ivec3(0, 0, 1)))
-			GetChunk(_Position + glm::ivec3(0, 0, 1))->State = Outdated;
-		if (GetChunk(_Position + glm::ivec3(0, 0, -1)))
-			GetChunk(_Position + glm::ivec3(0, 0, -1))->State = Outdated;
-		if (GetChunk(_Position + glm::ivec3(1, 0, 0)))
-			GetChunk(_Position + glm::ivec3(1, 0, 0))->State = Outdated;
-		if (GetChunk(_Position + glm::ivec3(-1, 0, 0)))
-			GetChunk(_Position + glm::ivec3(-1, 0, 0))->State = Outdated;
-		if (GetChunk(_Position + glm::ivec3(0, 1, 0)))
-			GetChunk(_Position + glm::ivec3(0, 1, 0))->State = Outdated;
-		if (GetChunk(_Position + glm::ivec3(0, -1, 0)))
-			GetChunk(_Position + glm::ivec3(0, -1, 0))->State = Outdated;
+		else if (_Position.y < 0)
+		{
+			for (int x = 0; x < CHUNK_SIZE; x++)
+				for (int y = 0; y < CHUNK_SIZE; y++)
+					for (int z = 0; z < CHUNK_SIZE; z++)
+					{
+						chunk->SetBlock({ x, y, z }, Stone);
+					}
+		}
 
 		WorldChunks[_Position] = chunk;
 		ChunkContainer.push_back(chunk);
-		OutdatedChunks.push_front(chunk);
+		OutdatedChunks.push(chunk);
 	}
 }
 
 void World::UpdateChunkWNeighbours(glm::ivec3 _Position)
 {
-	if (GetChunk(_Position))
-		GetChunk(_Position)->MeshCreate();
+	glm::ivec3 Position = WorldToChunkPos(_Position);
+	Chunk* chunk = GetChunk(Position);
 
-	if (GetWorldChunk(_Position + glm::ivec3(0, 0, 1)))
-		GetWorldChunk(_Position + glm::ivec3(0, 0, 1))->MeshCreate();
-	if (GetWorldChunk(_Position + glm::ivec3(0, 0, -1)))
-		GetWorldChunk(_Position + glm::ivec3(0, 0, -1))->MeshCreate();
-	if (GetWorldChunk(_Position + glm::ivec3(1, 0, 0)))
-		GetWorldChunk(_Position + glm::ivec3(1, 0, 0))->MeshCreate();
-	if (GetWorldChunk(_Position + glm::ivec3(-1, 0, 0)))
-		GetWorldChunk(_Position + glm::ivec3(-1, 0, 0))->MeshCreate();
-	if (GetWorldChunk(_Position + glm::ivec3(0, 1, 0)))
-		GetWorldChunk(_Position + glm::ivec3(0, 1, 0))->MeshCreate();
-	if (GetWorldChunk(_Position + glm::ivec3(0, -1, 0)))
-		GetWorldChunk(_Position + glm::ivec3(0, -1, 0))->MeshCreate();
+	if (chunk)
+	{
+		chunk->PropagateLights();
+		chunk->MeshCreate();
+	}
 
+	for (int d = 0; d < 6; d++)
+	{
+		Chunk* chunk = GetChunk(Position + Dir2Vec3(d));
+
+		if (chunk)
+		{
+			chunk->PropagateLights();
+			chunk->MeshCreate();
+		}
+	}
 }
 
 void World::Update(glm::vec3 _PlayerPosition)
 {
-	PlayerCurrentPos.x = floor(_PlayerPosition.x) / CHUNK_SIZE;
-	PlayerCurrentPos.y = floor(_PlayerPosition.y) / CHUNK_SIZE;
-	PlayerCurrentPos.z = floor(_PlayerPosition.z) / CHUNK_SIZE;
+	PlayerCurrentPos = (glm::ivec3)floor(_PlayerPosition) / CHUNK_SIZE;
 
-	while (!OutdatedLightChunks.empty())
+	if (!OutdatedChunks.empty())
 	{
-		if (OutdatedLightChunks.at(0) != nullptr)
-		{
-			OutdatedLightChunks.at(0)->PropagateLights();
-			OutdatedLightChunks.pop_front();
-		}
-		else
-		{
-			OutdatedLightChunks.pop_front();
-		}
+		Chunk* chunk = OutdatedChunks.front();
+		OutdatedChunks.pop();
+		OutdatedChunks.push(chunk);
+
+		chunk->MeshCreate();
 	}
 
-	if (OutdatedChunks.size() > 0)
-	{
-		if (OutdatedChunks.at(0) != nullptr)
-		{
-			OutdatedChunks.at(0)->MeshCreate();
-			OutdatedChunks.pop_front();
-		}
-		else
-		{
-			OutdatedChunks.pop_front();
-		}
-	}
+	if (PlayerCurrentPos == PlayerOlderPos) return;
 
-	if (PlayerCurrentPos != PlayerOlderPos)
-	{
-		for (int x = PlayerCurrentPos.x - RenderDistanceH; x < PlayerCurrentPos.x + RenderDistanceH; x++)
-		for (int y = PlayerCurrentPos.y - RenderDistanceV; y < PlayerCurrentPos.y + RenderDistanceV; y++)
-		for (int z = PlayerCurrentPos.z - RenderDistanceH; z < PlayerCurrentPos.z + RenderDistanceH; z++)
-		{
-			PutChunk({ x, y, z });
-		}
-
-		for (int i = 0; i < ChunkContainer.size(); i++)
-		{
-			if (ChunkContainer.at(i)->State == Outdated)
-			{
-				OutdatedLightChunks.push_front(ChunkContainer.at(i));
-				OutdatedChunks.push_front(ChunkContainer.at(i));
-				break;
-			}
-		}
-	}
-}
-
-void World::RenderChunksInbound(GLuint& _ShaderID)
-{
 	for (int x = PlayerCurrentPos.x - RenderDistanceH; x < PlayerCurrentPos.x + RenderDistanceH; x++)
 	for (int y = PlayerCurrentPos.y - RenderDistanceV; y < PlayerCurrentPos.y + RenderDistanceV; y++)
 	for (int z = PlayerCurrentPos.z - RenderDistanceH; z < PlayerCurrentPos.z + RenderDistanceH; z++)
 	{
-		if (GetChunk({x, y, z}) != nullptr)
-		{
-			GetChunk({ x, y, z })->Render(_ShaderID);
-		}
+		PutChunk({ x, y, z });
 	}
 }
 
@@ -235,4 +185,18 @@ void World::RenderChunks(GLuint& _ShaderID)
 	{
 		ChunkContainer.at(c)->Render(_ShaderID);
 	}
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	 //This works for glasses as this is only like a mask but for blending for stuff like water we need to use the stuff above.
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0);
+	for (int c = 0; c < ChunkContainer.size(); c++)
+	{
+		ChunkContainer.at(c)->RenderTransparent(_ShaderID);
+	}
+	glDisable(GL_ALPHA_TEST);
+
+	glDisable(GL_BLEND);
 }

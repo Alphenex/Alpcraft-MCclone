@@ -55,6 +55,9 @@
     <ClCompile Include="src\Alpcraft\Player\camera.cpp">
       <Filter>Source Folder\Alpcraft\Player</Filter>
     </ClCompile>
+    <ClCompile Include="src\Alpcraft\Blocks\Blocks.cpp">
+      <Filter>Source Folder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\glObj\Texture.h">
@@ -93,8 +96,9 @@
     <ClInclude Include="src\Alpcraft\Player\player.h">
       <Filter>Source Folder\Alpcraft\Player</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="src\gameinfo.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Alpcraft\Blocks\Blocks.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\default.frag">
@@ -109,5 +113,8 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TODO.txt" />
   </ItemGroup>
 </Project>

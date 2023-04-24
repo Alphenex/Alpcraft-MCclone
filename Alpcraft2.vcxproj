@@ -14,6 +14,7 @@
     <ClCompile Include="src\Alpcraft\AChunk.cpp" />
     <ClCompile Include="src\Alpcraft\AChunkMesh.cpp" />
     <ClCompile Include="src\Alpcraft\AWorld.cpp" />
+    <ClCompile Include="src\Alpcraft\Blocks\Blocks.cpp" />
     <ClCompile Include="src\Alpcraft\Player\camera.cpp" />
     <ClCompile Include="src\Alpcraft\Player\player.cpp" />
     <ClCompile Include="src\glObj\IndexBuffer.cpp" />
@@ -29,6 +30,7 @@
     <ClInclude Include="src\Alpcraft\AChunk.h" />
     <ClInclude Include="src\Alpcraft\AChunkMesh.h" />
     <ClInclude Include="src\Alpcraft\AWorld.h" />
+    <ClInclude Include="src\Alpcraft\Blocks\Blocks.h" />
     <ClInclude Include="src\Alpcraft\Player\camera.h" />
     <ClInclude Include="src\Alpcraft\Player\player.h" />
     <ClInclude Include="src\Alpcraft\UtilityManager.h" />
@@ -48,6 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TODO.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

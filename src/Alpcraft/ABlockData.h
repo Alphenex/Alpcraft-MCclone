@@ -1,20 +1,22 @@
 #pragma once
 
-#include "GL/glew.h"
-#include "glm/glm.hpp"
 #include <string>
-#include <unordered_map>
+#include "Blocks/Blocks.h"
 
 enum Block : GLubyte {
 	Air,
 	Grass,
 	Dirt,
 	Stone,
-	CottonStone,
-	BlackRock,
+	Cottonstone,
+	Bedrock,
 	WoodLog,
-	GlowStone,
+	Glowstone,
 	Water,
+	Glass,
+	TintedGlass,
+	CraftingDesk,
+	Lava
 };
 
 enum BasicSides {
@@ -39,21 +41,31 @@ constexpr glm::ivec2 ReturnBlockTexture(Block _Block, GLubyte side)
 	case Stone:
 		return { 3, 0 };
 		break;
-	case CottonStone:
+	case Cottonstone:
 		return { 4, 0 };
 		break;
-	case BlackRock:
+	case Bedrock:
 		return { 5,0 };
 		break;
 	case WoodLog:
 		return ReturnBlockSide(side, { 7, 0 }, { 7, 0 }, { 6, 0 });
 		break;
-	case GlowStone:
+	case Glowstone:
 		return { 0, 1 };
 		break;
 	case Water:
 		return { 1, 1 };
 		break;
+	case Glass:
+		return { 2, 1 };
+		break;
+	case TintedGlass:
+		return { 3, 1 };
+		break;
+	case CraftingDesk:
+		return ReturnBlockSide(side, { 5, 1 }, { 7, 0 }, { 4, 1 });
+	case Lava:
+		return { 6, 1 };
 	}
 
 	return { 7, 7 }; // Missing Texture
@@ -68,8 +80,7 @@ constexpr static glm::ivec3 DirectionArray[6]
 	{0, 1, 0},
 	{0, -1, 0}
 };
-
-constexpr glm::ivec3 Dir2Vec(int dir)
+constexpr glm::ivec3 Dir2Vec3(int dir)
 {
 	return DirectionArray[dir];
 }
@@ -85,3 +96,9 @@ constexpr bool IsInBound(glm::ivec3 block)
 
 	return false;
 }
+
+struct LightNode {
+	LightNode(glm::ivec3 pos, int lightlevel) : NodePosition(pos), LightLevel(lightlevel) {}
+	glm::ivec3 NodePosition;
+	int LightLevel;
+};

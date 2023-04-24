@@ -11,10 +11,10 @@ uniform mat4 cameraMatrix;
 uniform vec3 chunkPosition;
 
 vec2 TexCoordList[4] = vec2[4](
-	vec2(0.0, 0.0),
 	vec2(0.125, 0.0),
-	vec2(0.125, 0.125),
-	vec2(0.0, 0.125)
+	vec2(0.0, 0.0),
+	vec2(0.0, 0.125),
+	vec2(0.125, 0.125)
 );
 
 void main()
@@ -32,5 +32,5 @@ void main()
 	gl_Position = cameraMatrix * vec4(x, y, z, 1.0f);
 
 	texCoord = TexCoordList[uvID] + vec2(textureXID, textureYID) * vec2(0.125, 0.125);
-	lightLevel = clamp(lightLVL, 0, 15) / 15;
+	lightLevel = clamp(lightLVL, 1, 15) / 15;
 }

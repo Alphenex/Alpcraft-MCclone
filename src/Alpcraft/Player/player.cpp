@@ -17,7 +17,7 @@ void Player::HandleMouseInput(World& world, sf::Window& window)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && window.hasFocus())
 	{
-		for (float i = 0; i < 8; i += 0.1f)
+		for (float i = 0; i < 256; i += 0.1f)
 		{
 			glm::vec3 AimedBlock = m_View->Position + (m_View->Orientation * i);
 			if (world.GetWorldBlock(AimedBlock) != Air)
@@ -37,7 +37,7 @@ void Player::HandleMouseInput(World& world, sf::Window& window)
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && window.hasFocus())
 	{
-		for (float i = 0; i < 8; i += 0.1f)
+		for (float i = 0; i < 256; i += 0.1f)
 		{
 			glm::vec3 AimedBlock = m_Position + (m_View->Orientation * i);
 			if (world.GetWorldBlock(AimedBlock) != Air)
@@ -126,44 +126,6 @@ void Player::Update(sf::Window& window, float dt, bool noclip, Shader& shader)
 {
 	HandleMovement(window, dt, noclip);
 
-	// Yandere Dev Code, Temporary.
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
-	{
-		m_SelectedBlock = Grass;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
-	{
-		m_SelectedBlock = Dirt;
-
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
-	{
-		m_SelectedBlock = Stone;
-
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
-	{
-		m_SelectedBlock = CottonStone;
-
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
-	{
-		m_SelectedBlock = BlackRock;
-
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
-	{
-		m_SelectedBlock = WoodLog;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
-	{
-		m_SelectedBlock = GlowStone;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
-	{
-		m_SelectedBlock = Water;
-	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 	{
 		window.close();
