@@ -80,6 +80,7 @@ constexpr static glm::ivec3 DirectionArray[6]
 	{0, 1, 0},
 	{0, -1, 0}
 };
+
 constexpr glm::ivec3 Dir2Vec3(int dir)
 {
 	return DirectionArray[dir];

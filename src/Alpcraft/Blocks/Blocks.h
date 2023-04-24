@@ -12,6 +12,7 @@ extern int BLOCKAMOUNT;
 const char* GetBlockName(Block block);
 bool GetBlockTransparency(Block block);
 bool GetBlockIsLightSource(Block block);
+GLubyte GetBlockLightEmitLevel(Block block);
 
 struct BlockInfo {
 	const char* BlockName = "NULL";
@@ -19,6 +20,8 @@ struct BlockInfo {
 
 	bool Transparency = false;
 	bool LightSource = false;
+
+	GLubyte LightEmitLevel = 0;
 
 	void Register()
 	{

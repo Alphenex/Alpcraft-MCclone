@@ -166,6 +166,7 @@ void Chunk::SetTorchLightLevel(glm::ivec3 _BlockPosition, GLubyte _LightLevel)
 	{
 
 		LightMap[CIndexV(_BlockPosition)] = (LightMap[CIndexV(_BlockPosition)] & 0xF) | (_LightLevel << 4);
+		State = Outdated;
 	}
 
 	if (_BlockPosition.z == CHUNK_SIZE)
@@ -193,6 +194,7 @@ void Chunk::SetSunLightLevel(glm::ivec3 _BlockPosition, GLubyte _LightLevel)
 	{
 
 		LightMap[CIndexV(_BlockPosition)] = (LightMap[CIndexV(_BlockPosition)] & 0xF0) | _LightLevel;
+		State = Outdated;
 	}
 
 	if (_BlockPosition.z == CHUNK_SIZE)
@@ -254,10 +256,12 @@ void Chunk::PropagateLights()
 	for (int y = 0; y < CHUNK_SIZE; y++)
 	for (int z = 0; z < CHUNK_SIZE; z++)
 	{
-		if (GetBlockIsLightSource(GetBlock({x, y, z})))
+		Block block = GetBlock({ x, y, z });
+
+		if (GetBlockIsLightSource(block))
 		{
 			RemoveTorchLight({ x, y ,z }); // We REMOVE the previous one and add a new one!
-			AddTorchlight({x, y, z}, 15);
+			AddTorchlight({x, y, z}, GetBlockLightEmitLevel(block));
 		}
 	}
 
@@ -432,6 +436,7 @@ void Chunk::PropagateLights()
 						NeighbourLightLevel + 2 <= NodeLightLevel)
 					{
 						ChunkNeighbour->AddTorchlight({ 31, NeighbourPosition.y, NeighbourPosition.z }, NodeLightLevel - 1);
+						ChunkNeighbour->State = Outdated;
 					}
 				}
 
@@ -443,6 +448,7 @@ void Chunk::PropagateLights()
 						NeighbourLightLevel + 2 <= NodeLightLevel)
 					{
 						ChunkNeighbour->AddTorchlight({ 0, NeighbourPosition.y, NeighbourPosition.z }, NodeLightLevel - 1);
+						ChunkNeighbour->State = Outdated;
 					}
 				}
 
@@ -454,6 +460,7 @@ void Chunk::PropagateLights()
 						NeighbourLightLevel + 2 <= NodeLightLevel)
 					{
 						ChunkNeighbour->AddTorchlight({ NeighbourPosition.x, 31, NeighbourPosition.z }, NodeLightLevel - 1);
+						ChunkNeighbour->State = Outdated;
 					}
 				}
 
@@ -465,6 +472,7 @@ void Chunk::PropagateLights()
 						NeighbourLightLevel + 2 <= NodeLightLevel)
 					{
 						ChunkNeighbour->AddTorchlight({ NeighbourPosition.x, 0, NeighbourPosition.z }, NodeLightLevel - 1);
+						ChunkNeighbour->State = Outdated;
 					}
 				}
 
@@ -476,6 +484,7 @@ void Chunk::PropagateLights()
 						NeighbourLightLevel + 2 <= NodeLightLevel)
 					{
 						ChunkNeighbour->AddTorchlight({ NeighbourPosition.x, NeighbourPosition.y, 31 }, NodeLightLevel - 1);
+						ChunkNeighbour->State = Outdated;
 					}
 				}
 
@@ -487,6 +496,7 @@ void Chunk::PropagateLights()
 						NeighbourLightLevel + 2 <= NodeLightLevel)
 					{
 						ChunkNeighbour->AddTorchlight({ NeighbourPosition.x, NeighbourPosition.y, 0 }, NodeLightLevel - 1);
+						ChunkNeighbour->State = Outdated;
 					}
 				}
 			}
@@ -501,9 +511,10 @@ void Chunk::MeshCreate()
 	TMesh->IndCount = 0;
 	TMesh->PseudoIndCount = 0;
 
+	PropagateLights();
+
 	State = Updated;
 
-	PropagateLights();
 
 	for (int x = 0; x < CHUNK_SIZE; x++)
 	for (int y = 0; y < CHUNK_SIZE; y++)

@@ -63,10 +63,10 @@ public:
 
 	glm::ivec3 PlayerCurrentPos;
 	std::queue<Chunk*>	OutdatedChunks;
+	std::queue<Chunk*>	QueueChunks;
 private:
 	std::unordered_map<glm::ivec3, Chunk*> WorldChunks;
 	std::vector<Chunk*> ChunkContainer;
-	Chunk* Chunks[WorldMaxChunkAmount];
 
 	glm::ivec3 PlayerOlderPos = { 0, -12322, 0 };
 };

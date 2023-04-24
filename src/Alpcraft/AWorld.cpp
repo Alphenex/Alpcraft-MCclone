@@ -127,9 +127,12 @@ void World::PutChunk(glm::ivec3 _Position)
 					}
 		}
 
+		chunk->State = Outdated;
+
 		WorldChunks[_Position] = chunk;
 		ChunkContainer.push_back(chunk);
 		OutdatedChunks.push(chunk);
+		QueueChunks.push(chunk);
 	}
 }
 
@@ -162,11 +165,29 @@ void World::Update(glm::vec3 _PlayerPosition)
 
 	if (!OutdatedChunks.empty())
 	{
-		Chunk* chunk = OutdatedChunks.front();
-		OutdatedChunks.pop();
-		OutdatedChunks.push(chunk);
+		while (OutdatedChunks.front()->State == Updated)
+		{
+			OutdatedChunks.pop();
+		}
 
+		if (OutdatedChunks.front()->State == Outdated)
+		{
+			Chunk* chunk = OutdatedChunks.front();
+			OutdatedChunks.pop();
+
+			chunk->PropagateLights();
+			chunk->MeshCreate();
+		}
+	}
+
+	if (!QueueChunks.empty())
+	{
+		Chunk* chunk = QueueChunks.front();
+		QueueChunks.pop();
+
+		chunk->PropagateLights();
 		chunk->MeshCreate();
+		QueueChunks.push(chunk);
 	}
 
 	if (PlayerCurrentPos == PlayerOlderPos) return;
@@ -183,7 +204,8 @@ void World::RenderChunks(GLuint& _ShaderID)
 {
 	for (int c = 0; c < ChunkContainer.size(); c++)
 	{
-		ChunkContainer.at(c)->Render(_ShaderID);
+		if (ChunkContainer.at(c))
+			ChunkContainer.at(c)->Render(_ShaderID);
 	}
 
 	glEnable(GL_BLEND);
@@ -194,7 +216,8 @@ void World::RenderChunks(GLuint& _ShaderID)
 	glAlphaFunc(GL_GREATER, 0);
 	for (int c = 0; c < ChunkContainer.size(); c++)
 	{
-		ChunkContainer.at(c)->RenderTransparent(_ShaderID);
+		if (ChunkContainer.at(c))
+			ChunkContainer.at(c)->RenderTransparent(_ShaderID);
 	}
 	glDisable(GL_ALPHA_TEST);
 

@@ -19,6 +19,11 @@ extern bool GetBlockIsLightSource(Block block)
 	return BLOCKINFOS[block].LightSource;
 }
 
+extern GLubyte GetBlockLightEmitLevel(Block block)
+{
+	return BLOCKINFOS[block].LightEmitLevel;
+}
+
 void INIT_Air()
 {
 	BlockInfo BlockType;
@@ -82,6 +87,7 @@ void INIT_Glowstone()
 	BlockType.BlockName = "Glowstone";
 	BlockType.BlockID = (Block)7;
 	BlockType.LightSource = true;
+	BlockType.LightEmitLevel = 15;
 	BlockType.Register();
 }
 
@@ -126,5 +132,6 @@ void INIT_Lava()
 	BlockType.BlockName = "Lava";
 	BlockType.BlockID = (Block)12;
 	BlockType.LightSource = true;
+	BlockType.LightEmitLevel = 13;
 	BlockType.Register();
 }

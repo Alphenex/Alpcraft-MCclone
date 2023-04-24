@@ -85,6 +85,8 @@ int main(void)
 
         UtilManager.BindBlockShader();
 
+
+
         player.Update(window, dt, false, UtilManager.GetShader());
         world.Update(player.GetPosition());
 
@@ -123,7 +125,8 @@ int main(void)
             std::to_string((int)player.GetChunkPosition().y) + " " +
             std::to_string((int)player.GetChunkPosition().z) + "\n\n"
             "Selected Block: " + GetBlockName(player.GetSelectedBlock()) + "\n\n"
-            "Frames Per Second: " + std::to_string((int)fps.getFPS())
+            "Frames Per Second: " + std::to_string((int)fps.getFPS()) + "\n\n"
+            "Outdated Chunk Size: " + std::to_string(world.OutdatedChunks.size())
         );
 
         window.draw(text);
