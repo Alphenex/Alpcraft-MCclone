@@ -47,7 +47,7 @@ int main(void)
 
     World world;
 
-    Player player({ 0.0f, 34.0f, 0.0f });
+    Player player({ 16.0f, 18.0f, 16.0f });
 
     sf::Clock deltaClock2;
 
@@ -72,7 +72,6 @@ int main(void)
 
             if (event.type == sf::Event::MouseWheelScrolled )
             {
-
                 player.m_SelectedBlock = (Block)floor(event.mouseWheelScroll.delta + player.m_SelectedBlock);
 
                 if (player.m_SelectedBlock < Grass) player.m_SelectedBlock = Grass;
@@ -126,7 +125,6 @@ int main(void)
             std::to_string((int)player.GetChunkPosition().z) + "\n\n"
             "Selected Block: " + GetBlockName(player.GetSelectedBlock()) + "\n\n"
             "Frames Per Second: " + std::to_string((int)fps.getFPS()) + "\n\n"
-            "Time Elapsed: " + std::to_string(deltaClock2.getElapsedTime().asSeconds())
         );
 
         window.draw(text);

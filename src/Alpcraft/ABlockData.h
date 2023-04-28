@@ -20,13 +20,41 @@ enum Block : GLubyte {
 };
 
 enum BasicSides {
+	FrontTexture,
+	BackTexture,
+	RightTexture,
+	LeftTexture,
 	TopTexture,
-	BottomTexture,
-	SideTexture
+	BottomTexture
 };
 
-constexpr glm::ivec2 ReturnBlockSide(GLubyte side, glm::ivec2 t1, glm::ivec2  t2, glm::ivec2  t3)
-{ return side == 0 ? t1 : side == 1 ? t2 : side == 2 ? t3 : glm::ivec2(7, 7); }
+constexpr glm::ivec2 ReturnBlockSide(GLubyte side,
+	glm::ivec2 top,
+	glm::ivec2 bottom,
+	glm::ivec2 sides)
+{
+	return side == 4 ?
+		top : side == 5 ?
+		bottom : side == 0 ?
+		sides : sides;
+}
+
+constexpr glm::ivec2 ReturnBlockSide(GLubyte side,
+	glm::ivec2 top,
+	glm::ivec2 bottom,
+	glm::ivec2 front,
+	glm::ivec2 back,
+	glm::ivec2 right,
+	glm::ivec2 left)
+{
+	return side == 4 ?
+		top : side == 5 ?
+		bottom : side == 0 ?
+		front : side == 1 ?
+		back : side == 2 ?
+		right : side == 3 ?
+		left : glm::ivec2(7, 7);
+}
 
 constexpr glm::ivec2 ReturnBlockTexture(Block _Block, GLubyte side)
 {
@@ -63,7 +91,7 @@ constexpr glm::ivec2 ReturnBlockTexture(Block _Block, GLubyte side)
 		return { 3, 1 };
 		break;
 	case CraftingDesk:
-		return ReturnBlockSide(side, { 5, 1 }, { 7, 0 }, { 4, 1 });
+		return ReturnBlockSide(side, { 5, 1 }, { 7, 0 }, { 4, 1 }, { 7, 1 }, { 7, 1 }, { 7, 1 });
 	case Lava:
 		return { 6, 1 };
 	}

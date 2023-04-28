@@ -17,37 +17,37 @@ void Player::HandleMouseInput(World& world, sf::Window& window)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && window.hasFocus())
 	{
-		//for (float i = 0; i < 256; i += 0.1f)
-		//{
-		//	glm::vec3 AimedBlock = m_View->Position + (m_View->Orientation * i);
-		//	if (world.GetWorldBlock(AimedBlock) != Air)
-		//	{
-		//		if (m_SelectedBlock != Air)
-		//		{
-		//			glm::vec3 checkpos = AimedBlock - m_View->Orientation * 0.1f;
+		for (float i = 0; i < 12; i += 0.1f)
+		{
+			glm::vec3 AimedBlock = m_View->Position + (m_View->Orientation * i);
+			if (world.GetWorldBlock(AimedBlock) != Air)
+			{
+				if (m_SelectedBlock != Air)
+				{
+					glm::vec3 checkpos = AimedBlock - m_View->Orientation * 0.1f;
 
-		//			world.SetWorldBlock(checkpos, m_SelectedBlock);
+					world.SetWorldBlock(checkpos, m_SelectedBlock);
 
-		//			world.UpdateChunkWNeighbours(checkpos);
-		//			break;
-		//		}
-		//	}
-		//}
+					world.UpdateChunkNeighbour(WorldToChunkPos(checkpos));
+					break;
+				}
+			}
+		}
 	}
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && window.hasFocus())
 	{
-		//for (float i = 0; i < 256; i += 0.1f)
-		//{
-		//	glm::vec3 AimedBlock = m_Position + (m_View->Orientation * i);
-		//	if (world.GetWorldBlock(AimedBlock) != Air)
-		//	{
-		//		world.RemoveWorldBlock(AimedBlock);
+		for (float i = 0; i < 12; i += 0.1f)
+		{
+			glm::vec3 AimedBlock = m_Position + (m_View->Orientation * i);
+			if (world.GetWorldBlock(AimedBlock) != Air)
+			{
+				world.RemoveWorldBlock(AimedBlock);
 
-		//		world.UpdateChunkWNeighbours(AimedBlock);
-		//		break;
-		//	}
-		//}
+				world.UpdateChunkNeighbour(WorldToChunkPos(AimedBlock));
+				break;
+			}
+		}
 	}
 }
 
@@ -131,13 +131,8 @@ void Player::Update(sf::Window& window, float dt, bool noclip, Shader& shader)
 		window.close();
 	}
 
-	m_BlockPosition.x = m_Position.x < 0 ? round((CHUNK_SIZE - 1 + ((int)m_Position.x % CHUNK_SIZE)) % CHUNK_SIZE) : (int)m_Position.x % CHUNK_SIZE;
-	m_BlockPosition.y = m_Position.y < 0 ? round((CHUNK_SIZE - 1 + ((int)m_Position.y % CHUNK_SIZE)) % CHUNK_SIZE) : (int)m_Position.y % CHUNK_SIZE;
-	m_BlockPosition.z = m_Position.z < 0 ? round((CHUNK_SIZE - 1 + ((int)m_Position.z % CHUNK_SIZE)) % CHUNK_SIZE) : (int)m_Position.z % CHUNK_SIZE;
-
-	m_ChunkPosition.x = m_Position.x < 0 ? (m_Position.x - CHUNK_SIZE) / CHUNK_SIZE : m_Position.x / CHUNK_SIZE;
-	m_ChunkPosition.y = m_Position.y < 0 ? (m_Position.y - CHUNK_SIZE) / CHUNK_SIZE : m_Position.y / CHUNK_SIZE;
-	m_ChunkPosition.z = m_Position.z < 0 ? (m_Position.z - CHUNK_SIZE) / CHUNK_SIZE : m_Position.z / CHUNK_SIZE;
+	m_BlockPosition = WorldToBlockPos(m_Position);
+	m_ChunkPosition = WorldToChunkPos(m_Position);
 
 	m_View->UpdateMatrix(c_FOV, 0.2f, 1000.0f);
 	m_View->ShaderMatrix(shader, "cameraMatrix");

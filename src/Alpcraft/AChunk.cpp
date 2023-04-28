@@ -111,7 +111,7 @@ GLubyte Chunk::GetNeighbourTorchLightLevel(glm::ivec3 _BlockPosition, glm::ivec3
 
 	if (!Neighbour) return 0;
 
-	//return Neighbour->GetTorchLightLevel({ _BlockPosition.x, _BlockPosition.y, _BlockPosition.z });
+	return Neighbour->GetTorchLightLevel({ _BlockPosition.x, _BlockPosition.y, _BlockPosition.z });
 }
 
 GLubyte Chunk::GetSunLightLevel(glm::ivec3 _BlockPosition)
@@ -450,10 +450,7 @@ void Chunk::MeshCreate()
 			glm::ivec3 NeighbourPosition = glm::ivec3(x, y, z) + Dir2Vec3(d);
 			Block NeighbourBlock = GetBlock(NeighbourPosition);
 
-			BasicSides TextureFace = SideTexture;
-
-			if (d == UpFace) TextureFace = TopTexture;
-			else if (d == DownFace) TextureFace = BottomTexture;
+			BasicSides TextureFace = (BasicSides)d;
 
 			if (NeighbourBlock == Air || (!GetBlockTransparency(block) && GetBlockTransparency(NeighbourBlock)))
 			{
