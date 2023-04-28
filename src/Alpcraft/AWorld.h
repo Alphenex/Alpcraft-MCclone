@@ -11,8 +11,9 @@
 #include "AChunk.h"
 #include <thread>
 
-#define RenderDistanceH 4
-#define RenderDistanceV 2
+constexpr int WorldSize = 4;
+constexpr int WorldOffset = WorldSize / 2;
+constexpr int WorldArraySize = WorldSize + 1; // Because we need to take 0 into account.
 
 constexpr glm::ivec3 WorldToBlockPos(glm::vec3 _WorldPosition)
 {
@@ -32,41 +33,54 @@ constexpr glm::ivec3 WorldToChunkPos(glm::vec3 _WorldPosition)
 	return ChunkPos;
 }
 
-constexpr int WorldMaxChunkAmount = (RenderDistanceH * RenderDistanceH * RenderDistanceV);
+constexpr bool IsChunkInBound(glm::ivec3 chunkpos)
+{
+	chunkpos += WorldOffset;
 
-#define WIndex(x, y, z) x + RenderDistanceV * (y + RenderDistanceH * z)
-#define WIndexV(vpos) vpos.x + RenderDistanceV * (vpos.y + RenderDistanceH * vpos.z)
+	if (chunkpos.x >= 0 && chunkpos.x < WorldArraySize &&
+		chunkpos.y >= 0 && chunkpos.y < WorldArraySize &&
+		chunkpos.z >= 0 && chunkpos.z < WorldArraySize)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+constexpr bool IsWorldBlockInBound(glm::vec3 blockworldpos)
+{
+	int MaxSize = WorldSize * CHUNK_SIZE;
+
+	if (blockworldpos.x >= 0 && blockworldpos.x < MaxSize - 1 && // - 1 because we need to make sure that
+		blockworldpos.y >= 0 && blockworldpos.y < MaxSize - 1 && // it works with the BlockMap of chunk objects.
+		blockworldpos.z >= 0 && blockworldpos.z < MaxSize - 1)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+#define WIndex(x, y, z) ((x * WorldArraySize) * WorldArraySize) + (y * WorldArraySize) + z // Index to get array position with individual position
+#define WIndexV(vpos) ((vpos.x * WorldArraySize) * WorldArraySize) + (vpos.y * WorldArraySize) + vpos.z // Index to get array position with vector
 
 class World {
 public:
 	World();
 	~World();
 
-	Chunk* GetChunk(glm::ivec3 _ChunkPosition);
-	Chunk* GetWorldChunk(glm::vec3 _ChunkWorldPosition);
 
-	Block GetWorldBlock(glm::vec3 _WorldPosition);
-	int GetWorldTorchLight(glm::vec3 _WorldPosition);
-
-	void SetWorldBlock(glm::vec3 _WorldPosition, Block _TypeID);
-	void RemoveWorldBlock(glm::vec3 _WorldPosition);
-
-	void RemoveWorldTorchLight(glm::vec3 _WorldPosition);
-	void AddWorldTorchLight(glm::vec3 _WorldPosition, GLubyte _LightLevel);
-
-	void PutChunk(glm::ivec3 _Position);
-	void UpdateChunkWNeighbours(glm::ivec3 _Position);
+	void CreateChunk(glm::ivec3 _ChunkPosition);
 
 	void Update(glm::vec3 _PlayerPosition);
-
 	void RenderChunks(GLuint& _ShaderID);
 
+	Chunk* GetChunk(glm::ivec3 pos);
+	Block GetWorldBlock();
+
 	glm::ivec3 PlayerCurrentPos;
-	std::queue<Chunk*>	OutdatedChunks;
-	std::queue<Chunk*>	QueueChunks;
 private:
-	std::unordered_map<glm::ivec3, Chunk*> WorldChunks;
-	std::vector<Chunk*> ChunkContainer;
+	Chunk* WorldChunks[WorldArraySize * WorldArraySize * WorldArraySize]; // shush
 
 	glm::ivec3 PlayerOlderPos = { 0, -12322, 0 };
 };

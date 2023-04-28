@@ -86,18 +86,6 @@ constexpr glm::ivec3 Dir2Vec3(int dir)
 	return DirectionArray[dir];
 }
 
-constexpr bool IsInBound(glm::ivec3 block)
-{
-	if (block.x >= 0 && block.x < 32 &&
-		block.y >= 0 && block.y < 32 &&
-		block.z >= 0 && block.z < 32)
-	{
-		return true;
-	}
-
-	return false;
-}
-
 struct LightNode {
 	LightNode(glm::ivec3 pos, int lightlevel) : NodePosition(pos), LightLevel(lightlevel) {}
 	glm::ivec3 NodePosition;

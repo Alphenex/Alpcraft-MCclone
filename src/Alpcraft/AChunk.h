@@ -14,14 +14,19 @@
 #define MAX_BLOCK_AMOUNT 32768
 
 #define CIndex(x, y, z) ((x * CHUNK_SIZE) * CHUNK_SIZE) + (y * CHUNK_SIZE) + z // Index to get array position with individual position
-
 #define CIndexV(vpos) ((vpos.x * CHUNK_SIZE) * CHUNK_SIZE) + (vpos.y * CHUNK_SIZE) + vpos.z // Index to get array position with vector
 
-enum ChunkState {
-	Outdated = 0,
-	Updated = 1,
-	UnInitialized = 2
-};
+constexpr bool IsBlockInBound(glm::ivec3 blockpos)
+{
+	if (blockpos.x >= 0 && blockpos.x < CHUNK_SIZE &&
+		blockpos.y >= 0 && blockpos.y < CHUNK_SIZE &&
+		blockpos.z >= 0 && blockpos.z < CHUNK_SIZE)
+	{
+		return true;
+	}
+
+	return false;
+}
 
 enum BlockFace : GLubyte {
 	FrontFace,	// Z+
@@ -69,11 +74,8 @@ public:
 	void Render(GLuint& _ShaderID);
 	void RenderTransparent(GLuint& _ShaderID);
 
-	GLubyte State = UnInitialized;
-
 	ChunkMesh* Mesh;
 	ChunkMesh* TMesh;
-
 private:
 	Block ChunkBlocks[MAX_BLOCK_AMOUNT]; // 32768 because a chunk is 32^3, thus 32x32x32.
 	GLubyte LightMap[MAX_BLOCK_AMOUNT];

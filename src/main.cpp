@@ -126,7 +126,7 @@ int main(void)
             std::to_string((int)player.GetChunkPosition().z) + "\n\n"
             "Selected Block: " + GetBlockName(player.GetSelectedBlock()) + "\n\n"
             "Frames Per Second: " + std::to_string((int)fps.getFPS()) + "\n\n"
-            "Outdated Chunk Size: " + std::to_string(world.OutdatedChunks.size())
+            "Time Elapsed: " + std::to_string(deltaClock2.getElapsedTime().asSeconds())
         );
 
         window.draw(text);

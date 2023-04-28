@@ -17,37 +17,37 @@ void Player::HandleMouseInput(World& world, sf::Window& window)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && window.hasFocus())
 	{
-		for (float i = 0; i < 256; i += 0.1f)
-		{
-			glm::vec3 AimedBlock = m_View->Position + (m_View->Orientation * i);
-			if (world.GetWorldBlock(AimedBlock) != Air)
-			{
-				if (m_SelectedBlock != Air)
-				{
-					glm::vec3 checkpos = AimedBlock - m_View->Orientation * 0.1f;
+		//for (float i = 0; i < 256; i += 0.1f)
+		//{
+		//	glm::vec3 AimedBlock = m_View->Position + (m_View->Orientation * i);
+		//	if (world.GetWorldBlock(AimedBlock) != Air)
+		//	{
+		//		if (m_SelectedBlock != Air)
+		//		{
+		//			glm::vec3 checkpos = AimedBlock - m_View->Orientation * 0.1f;
 
-					world.SetWorldBlock(checkpos, m_SelectedBlock);
+		//			world.SetWorldBlock(checkpos, m_SelectedBlock);
 
-					world.UpdateChunkWNeighbours(checkpos);
-					break;
-				}
-			}
-		}
+		//			world.UpdateChunkWNeighbours(checkpos);
+		//			break;
+		//		}
+		//	}
+		//}
 	}
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && window.hasFocus())
 	{
-		for (float i = 0; i < 256; i += 0.1f)
-		{
-			glm::vec3 AimedBlock = m_Position + (m_View->Orientation * i);
-			if (world.GetWorldBlock(AimedBlock) != Air)
-			{
-				world.RemoveWorldBlock(AimedBlock);
+		//for (float i = 0; i < 256; i += 0.1f)
+		//{
+		//	glm::vec3 AimedBlock = m_Position + (m_View->Orientation * i);
+		//	if (world.GetWorldBlock(AimedBlock) != Air)
+		//	{
+		//		world.RemoveWorldBlock(AimedBlock);
 
-				world.UpdateChunkWNeighbours(AimedBlock);
-				break;
-			}
-		}
+		//		world.UpdateChunkWNeighbours(AimedBlock);
+		//		break;
+		//	}
+		//}
 	}
 }
 
