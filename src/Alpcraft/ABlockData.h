@@ -16,7 +16,10 @@ enum Block : GLubyte {
 	Glass,
 	TintedGlass,
 	CraftingDesk,
-	Lava
+	Lava,
+	BlueRose,
+	Torch,
+	Turf
 };
 
 enum BasicSides {
@@ -91,9 +94,15 @@ constexpr glm::ivec2 ReturnBlockTexture(Block _Block, GLubyte side)
 		return { 3, 1 };
 		break;
 	case CraftingDesk:
-		return ReturnBlockSide(side, { 5, 1 }, { 7, 0 }, { 4, 1 }, { 7, 1 }, { 7, 1 }, { 7, 1 });
+		return ReturnBlockSide(side, { 5, 1 }, { 7, 1 }, { 4, 1 }, { 4, 1 }, { 0, 2 }, { 0, 2 } );
 	case Lava:
 		return { 6, 1 };
+	case BlueRose:
+		return { 1, 2 };
+	case Torch:
+		return { 2, 2 };
+	case Turf:
+		return { 3, 2 };
 	}
 
 	return { 7, 7 }; // Missing Texture

@@ -53,11 +53,44 @@ static const glm::ivec3 BlockVertex[6][4] = {
 	}
 };
 
-void ChunkMesh::AddFace(GLubyte _Side, glm::ivec3 _BlockPosition, glm::ivec2 _TexturePos, unsigned int LightLevel)
+static const glm::ivec3 CrossVertex[4][4] = {
+	{
+		{1, 1, 1},
+		{0, 1, 0},
+		{0, 0, 0},
+		{1, 0, 1},
+	},
+	{
+		{1, 1, 0},
+		{0, 1, 1},
+		{0, 0, 1},
+		{1, 0, 0},
+	},
+	{
+		{0, 1, 0},
+		{1, 1, 1},
+		{1, 0, 1},
+		{0, 0, 0},
+	},
+	{
+		{0, 1, 1},
+		{1, 1, 0},
+		{1, 0, 0},
+		{0, 0, 1},
+	},
+};
+
+void ChunkMesh::AddFace(GLubyte _Side, BlockMeshType _MeshType, glm::ivec3 _BlockPosition, glm::ivec2 _TexturePos, GLubyte LightLevel)
 {
 	for (unsigned int i = 0; i < 4; i++)
 	{
-		glm::ivec3 vertices = BlockVertex[_Side][i] + _BlockPosition;
+		glm::ivec3 vertices = {0, 0, 0};
+
+		if (_MeshType == CubeMesh)
+			vertices = BlockVertex[_Side][i] + _BlockPosition;
+		else if (_MeshType == CrossMesh)
+			vertices = CrossVertex[_Side][i] + _BlockPosition;
+
 		GLubyte x = (GLubyte)vertices.x;
 		GLubyte y = (GLubyte)vertices.y;
 		GLubyte z = (GLubyte)vertices.z;

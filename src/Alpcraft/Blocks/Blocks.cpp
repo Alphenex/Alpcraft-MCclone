@@ -19,6 +19,11 @@ extern bool GetBlockIsLightSource(Block block)
 	return BLOCKINFOS[block].LightSource;
 }
 
+extern BlockMeshType GetBlockMeshType(Block block)
+{
+	return BLOCKINFOS[block].MeshType;
+}
+
 extern GLubyte GetBlockLightEmitLevel(Block block)
 {
 	return BLOCKINFOS[block].LightEmitLevel;
@@ -133,5 +138,40 @@ void INIT_Lava()
 	BlockType.BlockID = (Block)12;
 	BlockType.LightSource = true;
 	BlockType.LightEmitLevel = 13;
+	BlockType.Register();
+}
+
+void INIT_BlueRose()
+{
+	BlockInfo BlockType;
+	BlockType.BlockName = "Blue Rose";
+	BlockType.BlockID = (Block)13;
+	BlockType.Transparency = true;
+	BlockType.MeshType = CrossMesh;
+
+	BlockType.Register();
+}
+
+void INIT_Torch()
+{
+	BlockInfo BlockType;
+	BlockType.BlockName = "Torch";
+	BlockType.BlockID = (Block)14;
+	BlockType.LightSource = true;
+	BlockType.LightEmitLevel = 15;
+	BlockType.Transparency = true;
+	BlockType.MeshType = CrossMesh;
+
+	BlockType.Register();
+}
+
+void INIT_Turf()
+{
+	BlockInfo BlockType;
+	BlockType.BlockName = "Turf";
+	BlockType.BlockID = (Block)15;
+	BlockType.Transparency = true;
+	BlockType.MeshType = CrossMesh;
+
 	BlockType.Register();
 }

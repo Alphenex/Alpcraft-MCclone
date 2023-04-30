@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <GLM/glm.hpp>
 
+#include "../AChunkMesh.h"
+
 struct BlockInfo;
 enum Block : GLubyte;
 
@@ -13,6 +15,7 @@ const char* GetBlockName(Block block);
 bool GetBlockTransparency(Block block);
 bool GetBlockIsLightSource(Block block);
 GLubyte GetBlockLightEmitLevel(Block block);
+BlockMeshType GetBlockMeshType(Block block);
 
 struct BlockInfo {
 	const char* BlockName = "NULL";
@@ -23,8 +26,13 @@ struct BlockInfo {
 
 	GLubyte LightEmitLevel = 0;
 
+	BlockMeshType MeshType = CubeMesh;
+
 	void Register()
 	{
+		if (MeshType == CrossMesh)
+			Transparency = true;
+
 		BLOCKINFOS[BlockID] = *this;
 		BLOCKAMOUNT++;
 	}
@@ -49,4 +57,7 @@ inline void INIT_Blocks()
 	INIT(TintedGlass);
 	INIT(CraftingDesk);
 	INIT(Lava);
+	INIT(BlueRose);
+	INIT(Torch);
+	INIT(Turf);
 }

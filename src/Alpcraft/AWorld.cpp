@@ -19,6 +19,17 @@ World::World()
 				if (by == CHUNK_SIZE / 2 - 1)
 				{
 					chunk->SetBlock({ bx, by, bz }, Grass);
+
+					int random = glm::linearRand(0, 100);
+
+					if (random <= 20)
+					{
+						chunk->SetBlock({ bx, by + 1, bz }, Turf);
+					}
+					else if (random >= 95)
+					{
+						chunk->SetBlock({ bx, by + 1, bz }, BlueRose);
+					}
 				}
 				else if (by > CHUNK_SIZE / 2 - 5 && by < CHUNK_SIZE / 2 - 1)
 				{
@@ -93,7 +104,7 @@ Chunk* World::CreateChunk(glm::ivec3 _ChunkPosition)
 
 		chunk->MeshCreate();
 
-		glm::ivec3 poswoffset = _ChunkPosition + WorldOffset;
+		glm::ivec3 poswoffset = _ChunkPosition + WorldOffset - PlayerCurrentPos;
 		WorldChunks[WIndexV(poswoffset)] = chunk;
 
 		return chunk;
@@ -129,7 +140,8 @@ void World::UpdateChunkNeighbour(glm::vec3 _ChunkPos)
 	if (IsChunkInRenderDistance(_ChunkPos, PlayerCurrentPos))
 	{
 		Chunk* originchunk = GetChunk(_ChunkPos);
-		originchunk->MeshCreate();
+
+		originchunk->PropagateLights();
 
 		for (int d = 0; d < 6; d++)
 		{
@@ -138,6 +150,16 @@ void World::UpdateChunkNeighbour(glm::vec3 _ChunkPos)
 			if (chunk)
 			{
 				chunk->PropagateLights();
+			}
+		}
+
+		originchunk->MeshCreate();
+		for (int d = 0; d < 6; d++)
+		{
+			Chunk* chunk = GetChunk((glm::ivec3)_ChunkPos + Dir2Vec3(d));
+
+			if (chunk)
+			{
 				chunk->MeshCreate();
 			}
 		}
@@ -160,20 +182,21 @@ void World::Update(glm::vec3 _PlayerPosition)
 	{
 		Chunk* chunk = WorldChunksOld[i];
 
-		if (chunk == NULL)
-			continue;
-
-		glm::ivec3 chunknormalpos = chunk->GetNormalPos();
-		glm::ivec3 poswoffset = chunknormalpos + WorldOffset;
-
-		if (IsChunkInRenderDistance(chunknormalpos, PlayerCurrentPos))
+		if (chunk != NULL)
 		{
-			WorldChunks[WIndexV(poswoffset)] = chunk;
-		}
-		else
-		{
-			WorldChunks[WIndexV(poswoffset)] = NULL;
-			delete chunk;
+
+			glm::ivec3 chunknormalpos = chunk->GetNormalPos();
+			glm::ivec3 poswoffset = chunknormalpos + WorldOffset;
+
+			if (IsChunkInRenderDistance(chunknormalpos, PlayerCurrentPos))
+			{
+				WorldChunks[WIndexV(poswoffset)] = chunk;
+			}
+			else
+			{
+				WorldChunks[WIndexV(poswoffset)] = NULL;
+				delete chunk;
+			}
 		}
 	}
 

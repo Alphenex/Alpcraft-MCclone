@@ -32,5 +32,5 @@ void main()
 	gl_Position = cameraMatrix * vec4(x, y, z, 1.0f);
 
 	texCoord = TexCoordList[uvID] + vec2(textureXID, textureYID) * vec2(0.125, 0.125);
-	lightLevel = clamp(lightLVL, 2, 15) / 15;
+	lightLevel = clamp(lightLVL, 1, 15) / 15;
 }

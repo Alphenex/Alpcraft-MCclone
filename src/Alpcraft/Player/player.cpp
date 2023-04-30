@@ -1,5 +1,7 @@
 #include "player.h"
 #include "../../gameinfo.h"
+#include <GLM/gtx/compatibility.hpp>
+#include <cmath>
 
 Player::Player(glm::vec3 _StartPosition)
 	: m_Position(_StartPosition)
@@ -20,7 +22,8 @@ void Player::HandleMouseInput(World& world, sf::Window& window)
 		for (float i = 0; i < 12; i += 0.1f)
 		{
 			glm::vec3 AimedBlock = m_View->Position + (m_View->Orientation * i);
-			if (world.GetWorldBlock(AimedBlock) != Air)
+			Block AimedBlockType = world.GetWorldBlock(AimedBlock);
+			if (AimedBlockType != Air && GetBlockMeshType(AimedBlockType) == CubeMesh)
 			{
 				if (m_SelectedBlock != Air)
 				{
@@ -28,7 +31,7 @@ void Player::HandleMouseInput(World& world, sf::Window& window)
 
 					world.SetWorldBlock(checkpos, m_SelectedBlock);
 
-					world.UpdateChunkNeighbour(WorldToChunkPos(checkpos));
+					world.UpdateChunkNeighbour(WorldToChunkPos(AimedBlock));
 					break;
 				}
 			}
@@ -98,7 +101,7 @@ void Player::HandleMovement(sf::Window& window, float dt, bool noclip)
 		m_Position += c_FlightSpeed * -m_View->Up;
 	}
 
-	m_View->Position = m_Position;
+	m_View->Position = glm::lerp(m_View->Position, m_Position, 20.0f * dt);
 
 	if (window.hasFocus())
 	{

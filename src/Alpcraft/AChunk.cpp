@@ -344,6 +344,8 @@ void Chunk::PropagateLights()
 				if ((NeighbourBlock == Air || GetBlockTransparency(NeighbourBlock)) && //Check Block transparency.
 					NeighbourLightLevel + 2 <= NodeLightLevel)
 				{
+
+
 					AddTorchlight(NeighbourPosition, NodeLightLevel - 1);
 				}
 				continue;
@@ -445,6 +447,15 @@ void Chunk::MeshCreate()
 
 		Block block = GetBlock({ x, y, z });
 
+		if (GetBlockMeshType(block) == CrossMesh)
+		{
+			TMesh->AddFace(0, CrossMesh, { x, y, z }, ReturnBlockTexture(block, 0), GetTorchLightLevel({ x, y, z }));
+			TMesh->AddFace(1, CrossMesh, { x, y, z }, ReturnBlockTexture(block, 0), GetTorchLightLevel({ x, y, z }));
+			TMesh->AddFace(2, CrossMesh, { x, y, z }, ReturnBlockTexture(block, 0), GetTorchLightLevel({ x, y, z }));
+			TMesh->AddFace(3, CrossMesh, { x, y, z }, ReturnBlockTexture(block, 0), GetTorchLightLevel({ x, y, z }));
+			continue;
+		}
+
 		for (int d = 0; d < 6; d++)
 		{
 			glm::ivec3 NeighbourPosition = glm::ivec3(x, y, z) + Dir2Vec3(d);
@@ -456,11 +467,11 @@ void Chunk::MeshCreate()
 			{
 				if (!GetBlockTransparency(block))
 				{
-					Mesh->AddFace(d, { x, y, z }, ReturnBlockTexture(block, TextureFace), GetTorchLightLevel(NeighbourPosition));
+					Mesh->AddFace(d, CubeMesh, { x, y, z }, ReturnBlockTexture(block, TextureFace), GetTorchLightLevel(NeighbourPosition));
 				}
 				else
 				{
-					TMesh->AddFace(d, { x, y, z }, ReturnBlockTexture(block, TextureFace), GetTorchLightLevel(NeighbourPosition));
+					TMesh->AddFace(d, CubeMesh, { x, y, z }, ReturnBlockTexture(block, TextureFace), GetTorchLightLevel(NeighbourPosition));
 				}
 			}
 		}

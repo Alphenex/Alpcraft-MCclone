@@ -14,8 +14,8 @@ int main(void)
     settings.depthBits = 24;
     settings.stencilBits = 8;
     settings.antialiasingLevel = 0;
-    settings.majorVersion = 0;
-    settings.minorVersion = 0;
+    settings.majorVersion = 3;
+    settings.minorVersion = 3;
 
     sf::Image GameIcon;
     GameIcon.loadFromFile("textures/icon.png");
@@ -53,7 +53,7 @@ int main(void)
 
     FPS fps;
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 
     while (window.isOpen())
     {
@@ -92,13 +92,12 @@ int main(void)
 
         // OPENGL 3D DRAWING //
 
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
         glClearColor(93.0f / 255.0f, 180.0f / 255.0f, 238.0f / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glEnable(GL_CULL_FACE);
-        glCullFace(GL_FRONT);
-        glFrontFace(GL_CW);
         glEnable(GL_DEPTH_TEST);
 
         UtilManager.BindTextureAtlas();
@@ -111,6 +110,7 @@ int main(void)
         glDisable(GL_DEPTH_TEST);
 
         window.pushGLStates();
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
         window.draw(CrosshairSprite);
 
